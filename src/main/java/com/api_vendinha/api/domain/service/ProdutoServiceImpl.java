@@ -11,11 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Parameter;
+import java.util.List;
 
 @Service
 public class ProdutoServiceImpl implements ProdutoServiceInterface {
 
-    private final ProdutoRepository produtoRepository;
+    private final ProdutoRepository produtoRepository ;
     private final ParameterNamesModule parameterNamesModule;
 
 
@@ -24,11 +25,11 @@ public class ProdutoServiceImpl implements ProdutoServiceInterface {
         this.produtoRepository = produtoRepository;
         this.parameterNamesModule = parameterNamesModule;
          }
-
-    public ProdutoServiceImpl(ProdutoRepository produtoRepository, ParameterNamesModule parameterNamesModule) {
+    /* UserRepository userRepository*/
+    /*public ProdutoServiceImpl(ProdutoRepository produtoRepository, ParameterNamesModule parameterNamesModule) {
         this.produtoRepository = produtoRepository;
         this.parameterNamesModule = parameterNamesModule;
-    }
+    }*/
 
     @Override
     public ProdutoResponseDto save(ProdutoRequestDto produtoRequestDto) {
@@ -68,9 +69,21 @@ public class ProdutoServiceImpl implements ProdutoServiceInterface {
     }
 
     @Override
-    public Produto buscarPorId(Long id) {
-        return null;
+    public List<Produto> findall() {
+        return produtoRepository.findAll();
     }
+
+    @Override
+    public Produto findById(Long id) {
+        return produtoRepository.findById(id).orElseThrow();
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        Produto PodExist = produtoRepository.findById(id).orElseThrow();
+        produtoRepository.delete(PodExist);
+    }
+
 
 
 }

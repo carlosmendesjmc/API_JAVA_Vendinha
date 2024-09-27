@@ -1,5 +1,6 @@
 package com.api_vendinha.api.domain.dtos.request;
 
+import com.api_vendinha.api.domain.entities.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 public class ProdutoRequestDto {
     private Long id;
     private String name;
-    private String quantidade;
+    private Integer quantidade;
     private Double preco;
+
 }

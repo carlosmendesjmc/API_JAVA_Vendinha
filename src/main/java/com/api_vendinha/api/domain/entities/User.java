@@ -8,6 +8,8 @@ import org.hibernate.validator.constraints.br.CPF;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Entidade representando um usuário no sistema.
@@ -58,4 +60,7 @@ public class User {
     @Column (name = "is_active")
     private Boolean isActive;
 
+    /*Criando uma variavel privada, Criando uma Lista de produtos*/
+    @OneToMany(mappedBy = "user")
+    private List<Produto> produtos;
 }

@@ -12,4 +12,6 @@ CREATE TABLE PRODUTO (
                          NAME VARCHAR(255),                      -- Coluna NAME armazena o nome do usuário, com um máximo de 255 caracteres.
                          QUANTIDADE INT,
                          PRECO DECIMAL(10,2)                     -- Usando DECIMAL para precisão em valores monetários.
+
+                         USER_ID INTEGER REFERENCES USERS(ID)  --   Criando uma chave estrangeira
 );

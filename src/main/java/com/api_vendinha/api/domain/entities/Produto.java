@@ -26,7 +26,18 @@ public class Produto {
     @Column(name = "preco")
     private Double preco;
 
+    /*Criando uma variavel privada*/
+    /* @ManyToOne Estamos dizedo que muitos produtos pertence a um usuario*/
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
+    public Long getId(){
+        return id;
+    }
+    public void setId(Long id){
+        this.id = id;
+    }
 
 
 }

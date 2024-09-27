@@ -1,8 +1,10 @@
 package com.api_vendinha.api.domain.service;
 
+import com.api_vendinha.api.Infrastructure.repository.ProdutoRepository;
 import com.api_vendinha.api.Infrastructure.repository.UserRepository;
 import com.api_vendinha.api.domain.dtos.request.UserRequestDto;
 import com.api_vendinha.api.domain.dtos.response.UserResponseDto;
+import com.api_vendinha.api.domain.entities.Produto;
 import com.api_vendinha.api.domain.entities.User;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,9 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Implementação do serviço de usuários.
@@ -22,7 +27,8 @@ public class UserServiceImpl implements UserServiceInterface {
 
     // Repositório para a persistência de dados de usuários.
     private final UserRepository userRepository;
-    private final ParameterNamesModule parameterNamesModule;
+   /* private final ParameterNamesModule parameterNamesModule;*/
+    private final ProdutoRepository produtoRepository;
 
 
     /**
@@ -31,9 +37,10 @@ public class UserServiceImpl implements UserServiceInterface {
      * @param userRepository O repositório de usuários a ser injetado.
      */
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, ParameterNamesModule parameterNamesModule) {
+    public UserServiceImpl(UserRepository userRepository, ParameterNamesModule parameterNamesModule, ProdutoRepository produtoRepository) {
         this.userRepository = userRepository;
-        this.parameterNamesModule = parameterNamesModule;
+        /*this.parameterNamesModule = parameterNamesModule;*/
+        this.produtoRepository = produtoRepository;
     }
 
     /**
@@ -45,6 +52,7 @@ public class UserServiceImpl implements UserServiceInterface {
      * @param userRequestDto DTO contendo os dados do usuário a ser salvo ou atualizado.
      * @return DTO com as informações do usuário salvo, incluindo o ID gerado e o nome.
      */
+
     @Override
     public UserResponseDto save(UserRequestDto userRequestDto) {
         // Cria uma nova instância de User.
@@ -60,6 +68,25 @@ public class UserServiceImpl implements UserServiceInterface {
         // Salva o usuário no banco de dados e obtém a entidade persistida com o ID gerado.
         User savedUser = userRepository.save(user);
 
+
+/*tranformando tudo em uma lista*//*
+
+
+/* o stream é utilizado pra percorrer a lista e idexando cada item*/
+
+        List<Produto> produtos = userRequestDto.getProdutoRequestDtos().stream().map(
+                dto->{
+                    Produto produto = new Produto();
+                   produto.setName(dto.getName());
+                    produto.setPreco(dto.getPreco());
+                    produto.setQuantidade(dto.getQuantidade());
+                    produto.setUser(savedUser);
+                    return produto;
+
+                }).collect(Collectors.toList());
+
+        produtoRepository.saveAll(produtos);
+
         // Cria um DTO de resposta com as informações do usuário salvo.
         UserResponseDto userResponseDto = new UserResponseDto();
         userResponseDto.setId(savedUser.getId());
@@ -74,6 +101,7 @@ public class UserServiceImpl implements UserServiceInterface {
         // Retorna o DTO com as informações do usuário salvo.
         return userResponseDto;
     }
+
 
     @Override
     public UserResponseDto update(UserRequestDto userRequestDto, Long id) {

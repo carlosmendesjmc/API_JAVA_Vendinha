@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.AssertTrue;
+import java.util.List;
 
 /**
  * DTO para representar os dados necessários para criar ou atualizar um usuário.
@@ -23,4 +24,10 @@ public class UserRequestDto {
     private String cpf;
     private String cnpj;
     private Boolean is_active;
+    private List<ProdutoRequestDto> produtoRequestDtos;
+
+    /*public String getName(){  return name; }
+
+    public void setName(String name){  this.name = name; }
+*/
 }
